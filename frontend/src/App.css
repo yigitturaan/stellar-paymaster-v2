@@ -160,9 +160,9 @@
 
 .hero-sub {
   margin-top: 20px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-1);
-  max-width: 500px;
+  max-width: 460px;
   line-height: 1.6;
 }
 
@@ -259,10 +259,10 @@
   line-height: 1.65;
 }
 
-/* ── Bento Grid ── */
+/* ── Bento Grid (Features) ── */
 .bento-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -273,7 +273,7 @@
 
 .bento-cell {
   background: var(--bg-card);
-  padding: 32px;
+  padding: 28px 24px;
   transition: background 0.2s;
 }
 
@@ -281,29 +281,68 @@
   background: var(--bg-elevated);
 }
 
-.bento-cell h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-0);
-  margin-bottom: 8px;
-}
-
-.bento-cell p {
-  font-size: 0.85rem;
-  color: var(--text-1);
-  line-height: 1.6;
-}
-
-.bento-label {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.bento-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-muted);
   margin-bottom: 16px;
 }
 
+.bento-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bento-cell h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-0);
+  margin-bottom: 6px;
+}
+
+.bento-cell p {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.bento-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  height: 22px;
+  padding: 0 8px;
+  align-items: center;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+}
+
+.tag-accent {
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--accent);
+  background: var(--accent-muted);
+}
+
+/* ── Metrics Row ── */
 .bento-grid-3 {
   grid-template-columns: repeat(3, 1fr);
 }
@@ -321,12 +360,12 @@
   color: var(--text-2);
 }
 
-/* ── Terminal Window ── */
+/* ── Terminal Code Block ── */
 .terminal {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-top: 32px;
+  margin-top: 24px;
   background: var(--bg-card);
 }
 
@@ -387,70 +426,164 @@
 .terminal-body .t-fn { color: #93c5fd; }
 .terminal-body .t-str { color: var(--green); }
 .terminal-body .t-cmt { color: var(--text-3); }
-.terminal-body .t-op { color: var(--text-2); }
 
-/* ── Execution Flow ── */
+/* ══════════════════════════════════════════
+   Architecture — SVG Flow Diagram
+   ══════════════════════════════════════════ */
 .flow-section {
   text-align: center;
 }
 
-.flow-track {
+.arch-diagram {
+  margin-top: 48px;
+  position: relative;
+}
+
+.arch-svg {
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Animated pulse dots travelling along the connectors */
+@keyframes flowPulse {
+  0%   { offset-distance: 0%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+.pulse-dot {
+  offset-path: path(var(--path));
+  animation: flowPulse 2.4s ease-in-out infinite;
+  fill: var(--accent);
+}
+
+.pulse-dot:nth-child(2) { animation-delay: 0.8s; }
+.pulse-dot:nth-child(3) { animation-delay: 1.6s; }
+
+/* Connector lines */
+.arch-connector {
+  stroke: var(--border);
+  stroke-width: 1;
+  fill: none;
+}
+
+/* Node cards inside SVG (foreignObject) */
+.arch-card {
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  transition: border-color 0.2s;
+  cursor: default;
+}
+
+.arch-card:hover {
+  border-color: var(--border-hover);
+}
+
+.arch-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-elevated);
+}
+
+.arch-card-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.arch-card-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-0);
+}
+
+.arch-card-sub {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+}
+
+/* Fallback non-SVG flow for narrow screens */
+.flow-track-mobile {
+  display: none;
+  flex-direction: column;
   gap: 0;
-  margin-top: 40px;
+  margin-top: 32px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--border);
 }
 
-.flow-node {
-  flex: 1;
+.flow-node-m {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 28px 16px;
+  gap: 14px;
+  padding: 20px;
   background: var(--bg-card);
-  gap: 8px;
-  transition: background 0.15s;
 }
 
-.flow-node:hover {
-  background: var(--bg-elevated);
-}
-
-.flow-node-num {
+.flow-node-m-num {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  width: 20px;
+  text-align: right;
 }
 
-.flow-node-label {
-  font-size: 0.9rem;
+.flow-node-m-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.flow-node-m-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-node-m-label {
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-0);
 }
 
-.flow-node-detail {
+.flow-node-m-detail {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--text-2);
 }
 
-.flow-sep {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1px;
+.flow-sep-m {
+  height: 1px;
   background: var(--border);
-  position: relative;
 }
 
-/* ── Playground / Control Panel ── */
+/* ══════════════════════════════════════════
+   Playground / Control Panel (UNTOUCHED)
+   ══════════════════════════════════════════ */
 .playground {
   border-top: 1px solid var(--border);
 }
@@ -482,7 +615,6 @@
   margin-bottom: 20px;
 }
 
-/* Step items */
 .step-item {
   display: flex;
   gap: 12px;
@@ -546,7 +678,6 @@
   margin-top: 10px;
 }
 
-/* Connected wallet display in panel */
 .connected-badge {
   display: inline-flex;
   align-items: center;
@@ -578,7 +709,6 @@
   color: var(--text-1);
 }
 
-/* ── Transfer Form ── */
 .form-group {
   margin-top: 12px;
 }
@@ -722,7 +852,10 @@
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .bento-grid,
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .bento-grid-3 {
     grid-template-columns: 1fr;
   }
@@ -731,14 +864,8 @@
     grid-template-columns: 1fr;
   }
 
-  .flow-track {
-    flex-direction: column;
-  }
-
-  .flow-sep {
-    width: 100%;
-    height: 1px;
-  }
+  .arch-diagram { display: none; }
+  .flow-track-mobile { display: flex; }
 
   .hero {
     padding: 64px 20px 48px;
@@ -769,5 +896,11 @@
     flex-direction: column;
     gap: 16px;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -51,6 +51,212 @@ function ts() {
   return new Date().toLocaleTimeString("en-GB", { hour12: false });
 }
 
+/* ── Inline SVG Icons ── */
+
+function IconGasPump() {
+  return (
+    <svg viewBox="0 0 24 24">
+      <path d="M4 22V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16" />
+      <path d="M4 22h10" />
+      <path d="M14 10h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2v0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5" />
+      <line x1="2" y1="2" x2="22" y2="22" stroke="var(--red)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function IconCode() {
+  return (
+    <svg viewBox="0 0 24 24">
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  );
+}
+
+function IconShield() {
+  return (
+    <svg viewBox="0 0 24 24">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <polyline points="9 12 11 14 15 10" />
+    </svg>
+  );
+}
+
+function IconZap() {
+  return (
+    <svg viewBox="0 0 24 24">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>
+  );
+}
+
+function IconUser() {
+  return (
+    <svg viewBox="0 0 24 24" stroke="var(--text-1)" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
+function IconBox() {
+  return (
+    <svg viewBox="0 0 24 24" stroke="var(--accent)" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+      <line x1="12" y1="22.08" x2="12" y2="12" />
+    </svg>
+  );
+}
+
+function IconCloud() {
+  return (
+    <svg viewBox="0 0 24 24" stroke="var(--green)" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+    </svg>
+  );
+}
+
+function IconLink() {
+  return (
+    <svg viewBox="0 0 24 24" stroke="#93c5fd" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  );
+}
+
+/* ── Architecture SVG Diagram ── */
+
+function ArchDiagram() {
+  const nodeW = 160, nodeH = 100;
+  const gap = 80;
+  const totalW = nodeW * 4 + gap * 3;
+  const svgW = totalW + 40;
+  const svgH = nodeH + 80;
+  const y = 40;
+
+  const nodes = [
+    { x: 20, label: "User / DApp", sub: "WALLET", icon: <IconUser />, color: "var(--text-1)" },
+    { x: 20 + nodeW + gap, label: "Paymaster SDK", sub: "CLIENT", icon: <IconBox />, color: "var(--accent)" },
+    { x: 20 + (nodeW + gap) * 2, label: "Relayer Bot", sub: "API", icon: <IconCloud />, color: "var(--green)" },
+    { x: 20 + (nodeW + gap) * 3, label: "Soroban RPC", sub: "ON-CHAIN", icon: <IconLink />, color: "#93c5fd" },
+  ];
+
+  const connectors = [];
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const x1 = nodes[i].x + nodeW;
+    const x2 = nodes[i + 1].x;
+    const cy = y + nodeH / 2;
+    connectors.push({ x1, x2, cy, path: `M ${x1} ${cy} L ${x2} ${cy}` });
+  }
+
+  return (
+    <div className="arch-diagram">
+      <svg
+        className="arch-svg"
+        viewBox={`0 0 ${svgW} ${svgH}`}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Connector lines */}
+        {connectors.map((c, i) => (
+          <g key={`conn-${i}`}>
+            <line
+              x1={c.x1} y1={c.cy} x2={c.x2} y2={c.cy}
+              className="arch-connector"
+              strokeDasharray="4 4"
+            />
+            {/* Animated pulse dots */}
+            <circle r="3" className="pulse-dot" style={{ "--path": `"${c.path}"` }}>
+              <animateMotion
+                dur="2.4s"
+                repeatCount="indefinite"
+                path={c.path}
+                begin={`${i * 0.6}s`}
+                calcMode="spline"
+                keyTimes="0;1"
+                keySplines="0.42 0 0.58 1"
+              />
+              <animate
+                attributeName="opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.1;0.85;1"
+                dur="2.4s"
+                repeatCount="indefinite"
+                begin={`${i * 0.6}s`}
+              />
+            </circle>
+            <circle r="3" className="pulse-dot" style={{ "--path": `"${c.path}"` }}>
+              <animateMotion
+                dur="2.4s"
+                repeatCount="indefinite"
+                path={c.path}
+                begin={`${i * 0.6 + 1.2}s`}
+                calcMode="spline"
+                keyTimes="0;1"
+                keySplines="0.42 0 0.58 1"
+              />
+              <animate
+                attributeName="opacity"
+                values="0;1;1;0"
+                keyTimes="0;0.1;0.85;1"
+                dur="2.4s"
+                repeatCount="indefinite"
+                begin={`${i * 0.6 + 1.2}s`}
+              />
+            </circle>
+            {/* Arrow tip */}
+            <polygon
+              points={`${c.x2 - 6},${c.cy - 4} ${c.x2},${c.cy} ${c.x2 - 6},${c.cy + 4}`}
+              fill="var(--border-hover)"
+            />
+          </g>
+        ))}
+
+        {/* Node cards */}
+        {nodes.map((n, i) => (
+          <foreignObject key={i} x={n.x} y={y} width={nodeW} height={nodeH}>
+            <div className="arch-card">
+              <div className="arch-card-icon">{n.icon}</div>
+              <span className="arch-card-label">{n.label}</span>
+              <span className="arch-card-sub">{n.sub}</span>
+            </div>
+          </foreignObject>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+/* Mobile fallback flow */
+function MobileFlow() {
+  const items = [
+    { num: "01", label: "User / DApp", detail: "Wallet interaction", icon: <IconUser /> },
+    { num: "02", label: "Paymaster SDK", detail: "Simulate + sign auth", icon: <IconBox /> },
+    { num: "03", label: "Relayer Bot", detail: "Sign XDR + submit", icon: <IconCloud /> },
+    { num: "04", label: "Soroban RPC", detail: "On-chain finality", icon: <IconLink /> },
+  ];
+  return (
+    <div className="flow-track-mobile">
+      {items.map((item, i) => (
+        <div key={i}>
+          {i > 0 && <div className="flow-sep-m" />}
+          <div className="flow-node-m">
+            <span className="flow-node-m-num">{item.num}</span>
+            <span className="flow-node-m-icon">{item.icon}</span>
+            <div className="flow-node-m-text">
+              <span className="flow-node-m-label">{item.label}</span>
+              <span className="flow-node-m-detail">{item.detail}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════ */
+
 function App() {
   const [publicKey, setPublicKey] = useState(null);
   const [balance, setBalance] = useState(null);
@@ -215,8 +421,8 @@ function App() {
           <span className="accent">Infrastructure.</span>
         </h1>
         <p className="hero-sub">
-          An action-agnostic SDK that lets users pay transaction fees in
-          USDC instead of XLM. Integrate in three lines.
+          Users pay fees in USDC. Zero XLM required.<br />
+          Any contract call. Three lines to integrate.
         </p>
         <div className="hero-actions">
           <a href="#demo" className="btn btn-primary">
@@ -235,132 +441,96 @@ function App() {
 
       <div className="divider" />
 
-      {/* ── How it Works ── */}
+      {/* ── How It Works — Visual Bento ── */}
       <section id="how" className="section">
         <div className="section-tag">How it works</div>
-        <h2 className="section-title">The problem with Soroban gas</h2>
-        <p className="section-desc">
-          Every Soroban transaction requires XLM. Users holding only stablecoins
-          face a multi-step onboarding wall that kills conversion.
-        </p>
+        <h2 className="section-title">Gas abstraction for Soroban</h2>
 
         <div className="bento-grid">
           <div className="bento-cell">
-            <div className="bento-label">Problem</div>
-            <h3>XLM acquisition barrier</h3>
-            <p>
-              Before doing anything on Stellar, users need to acquire XLM from
-              an exchange, fund their wallet, and manage a second token they
-              don&apos;t want — just to pay gas.
-            </p>
+            <div className="bento-icon"><IconGasPump /></div>
+            <h3>Fee Delegation</h3>
+            <p>Users pay in USDC. Relayer covers XLM gas fees on their behalf.</p>
+            <div className="bento-tags">
+              <span className="tag tag-accent">SDK</span>
+              <span className="tag">USDC</span>
+            </div>
           </div>
           <div className="bento-cell">
-            <div className="bento-label">Solution</div>
-            <h3>Token-denominated fees</h3>
-            <p>
-              Wrap any contract call with our Paymaster. A relayer bot covers the
-              XLM fee and atomically collects a small token payment from the user.
-              One transaction, zero XLM.
-            </p>
+            <div className="bento-icon"><IconCode /></div>
+            <h3>Action-Agnostic</h3>
+            <p>Wraps any Soroban contract call — transfers, swaps, mints, votes.</p>
+            <div className="bento-tags">
+              <span className="tag">ANY CONTRACT</span>
+            </div>
           </div>
           <div className="bento-cell">
-            <div className="bento-label">Integration</div>
-            <h3>Three lines of code</h3>
-            <p>
-              Import the SDK, pass your contract call parameters,
-              and <code style={{ color: "var(--accent)" }}>paymaster.execute()</code> handles
-              simulation, signing, and relay.
-            </p>
+            <div className="bento-icon"><IconShield /></div>
+            <h3>Atomic Execution</h3>
+            <p>Fee + action in one transaction. No partial failures possible.</p>
+            <div className="bento-tags">
+              <span className="tag tag-accent">ON-CHAIN</span>
+              <span className="tag">SAFE</span>
+            </div>
           </div>
           <div className="bento-cell">
-            <div className="bento-label">Scope</div>
-            <h3>Action-agnostic</h3>
-            <p>
-              Not limited to transfers. Any Soroban contract invocation — swaps,
-              mints, governance votes, game actions — can be made gasless through
-              the same SDK.
-            </p>
+            <div className="bento-icon"><IconZap /></div>
+            <h3>3-Line SDK</h3>
+            <p>Import, configure, execute. Ship gasless features in minutes.</p>
+            <div className="bento-tags">
+              <span className="tag">NPM</span>
+              <span className="tag tag-accent">API</span>
+            </div>
           </div>
         </div>
 
-        {/* SDK sample */}
         <div className="terminal">
           <div className="terminal-bar">
             <div className="terminal-dots">
               <span /><span /><span />
             </div>
-            <span className="terminal-title">SorobanPaymaster.js — usage</span>
+            <span className="terminal-title">usage.js</span>
           </div>
           <div className="terminal-body">
             <div className="ln"><span className="ln-num">1</span><span className="ln-content"><span className="t-kw">const</span> paymaster = <span className="t-kw">new</span> <span className="t-fn">SorobanPaymaster</span>{"({"} ...config {"});"}</span></div>
             <div className="ln"><span className="ln-num">2</span><span className="ln-content" /></div>
             <div className="ln"><span className="ln-num">3</span><span className="ln-content"><span className="t-kw">await</span> paymaster.<span className="t-fn">execute</span>{"({"}</span></div>
-            <div className="ln"><span className="ln-num">4</span><span className="ln-content">{"  "}user:           publicKey,</span></div>
-            <div className="ln"><span className="ln-num">5</span><span className="ln-content">{"  "}targetContract: <span className="t-str">&quot;CUSDC...&quot;</span>,</span></div>
-            <div className="ln"><span className="ln-num">6</span><span className="ln-content">{"  "}functionName:   <span className="t-str">&quot;transfer&quot;</span>,</span></div>
-            <div className="ln"><span className="ln-num">7</span><span className="ln-content">{"  "}args:           [from, to, amount],</span></div>
-            <div className="ln"><span className="ln-num">8</span><span className="ln-content">{"  "}signer:         walletSigner,</span></div>
-            <div className="ln"><span className="ln-num">9</span><span className="ln-content">{"});"}</span></div>
+            <div className="ln"><span className="ln-num">4</span><span className="ln-content">{"  "}user, targetContract, functionName,</span></div>
+            <div className="ln"><span className="ln-num">5</span><span className="ln-content">{"  "}args, signer</span></div>
+            <div className="ln"><span className="ln-num">6</span><span className="ln-content">{"});"} <span className="t-cmt">{"// that's it — zero XLM needed"}</span></span></div>
           </div>
         </div>
       </section>
 
       <div className="divider" />
 
-      {/* ── Architecture Flow ── */}
+      {/* ── Architecture — SVG Flow ── */}
       <section id="flow" className="section flow-section">
         <div className="section-tag">Architecture</div>
         <h2 className="section-title">Transaction lifecycle</h2>
-        <p className="section-desc" style={{ margin: "0 auto" }}>
-          Four stages from user intent to on-chain finality.
-        </p>
 
-        <div className="flow-track">
-          <div className="flow-node">
-            <span className="flow-node-num">01</span>
-            <span className="flow-node-label">DApp</span>
-            <span className="flow-node-detail">SDK call</span>
-          </div>
-          <div className="flow-sep" />
-          <div className="flow-node">
-            <span className="flow-node-num">02</span>
-            <span className="flow-node-label">Paymaster SDK</span>
-            <span className="flow-node-detail">Simulate + sign auth</span>
-          </div>
-          <div className="flow-sep" />
-          <div className="flow-node">
-            <span className="flow-node-num">03</span>
-            <span className="flow-node-label">Relayer Bot</span>
-            <span className="flow-node-detail">Sign XDR + submit</span>
-          </div>
-          <div className="flow-sep" />
-          <div className="flow-node">
-            <span className="flow-node-num">04</span>
-            <span className="flow-node-label">Soroban RPC</span>
-            <span className="flow-node-detail">On-chain finality</span>
-          </div>
-        </div>
+        <ArchDiagram />
+        <MobileFlow />
 
-        {/* Key metrics */}
-        <div className="bento-grid bento-grid-3" style={{ marginTop: 16 }}>
+        <div className="bento-grid bento-grid-3" style={{ marginTop: 24 }}>
           <div className="bento-cell" style={{ textAlign: "center" }}>
             <div className="cell-value">0</div>
-            <div className="cell-unit">XLM required from user</div>
+            <div className="cell-unit">XLM from user</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
             <div className="cell-value">0.5</div>
-            <div className="cell-unit">USDC fee per transaction</div>
+            <div className="cell-unit">USDC fee</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
             <div className="cell-value">1</div>
-            <div className="cell-unit">Atomic transaction</div>
+            <div className="cell-unit">Atomic TX</div>
           </div>
         </div>
       </section>
 
       <div className="divider" />
 
-      {/* ── Playground ── */}
+      {/* ── Playground (PRESERVED EXACTLY) ── */}
       <section id="demo" className="section playground">
         <div className="section-tag">Playground</div>
         <h2 className="section-title">Control Panel</h2>
