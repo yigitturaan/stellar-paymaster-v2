@@ -365,14 +365,6 @@ function App() {
     }
   }
 
-  function handleOnboarding(action) {
-    if (action === "usdc") {
-      log("warn", "V2: Claimable Balances will auto-distribute test USDC. Currently use Stellar Laboratory.");
-    } else {
-      log("warn", "V2: Trustlines will be auto-established via sponsored transactions. Add USDC trustline from your wallet.");
-    }
-  }
-
   const needsMore =
     balance !== null && balance < SEND_AMOUNT + paymaster.feeAmount;
 
@@ -575,37 +567,8 @@ function App() {
 
             {/* Step 2 */}
             <div className="step-item">
-              <div className={`step-indicator ${publicKey && tokenOk ? "done" : publicKey ? "active" : ""}`}>
-                {publicKey && tokenOk ? "\u2713" : "2"}
-              </div>
-              <div className="step-content">
-                <div className="step-name">Onboarding</div>
-                <div className="step-detail">
-                  USDC trustline &amp; test tokens.
-                </div>
-                <div className="step-actions">
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => handleOnboarding("usdc")}
-                    disabled={!publicKey}
-                  >
-                    Request USDC
-                  </button>
-                  <button
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => handleOnboarding("trustline")}
-                    disabled={!publicKey}
-                  >
-                    Add Trustline
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="step-item">
               <div className={`step-indicator ${publicKey && tokenOk ? "active" : ""}`}>
-                3
+                2
               </div>
               <div className="step-content">
                 <div className="step-name">Execute Transfer</div>
