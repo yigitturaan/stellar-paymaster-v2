@@ -177,46 +177,6 @@ function ArchDiagram() {
               className="arch-connector"
               strokeDasharray="4 4"
             />
-            {/* Animated pulse dots */}
-            <circle r="3" className="pulse-dot" style={{ "--path": `"${c.path}"` }}>
-              <animateMotion
-                dur="2.4s"
-                repeatCount="indefinite"
-                path={c.path}
-                begin={`${i * 0.6}s`}
-                calcMode="spline"
-                keyTimes="0;1"
-                keySplines="0.42 0 0.58 1"
-              />
-              <animate
-                attributeName="opacity"
-                values="0;1;1;0"
-                keyTimes="0;0.1;0.85;1"
-                dur="2.4s"
-                repeatCount="indefinite"
-                begin={`${i * 0.6}s`}
-              />
-            </circle>
-            <circle r="3" className="pulse-dot" style={{ "--path": `"${c.path}"` }}>
-              <animateMotion
-                dur="2.4s"
-                repeatCount="indefinite"
-                path={c.path}
-                begin={`${i * 0.6 + 1.2}s`}
-                calcMode="spline"
-                keyTimes="0;1"
-                keySplines="0.42 0 0.58 1"
-              />
-              <animate
-                attributeName="opacity"
-                values="0;1;1;0"
-                keyTimes="0;0.1;0.85;1"
-                dur="2.4s"
-                repeatCount="indefinite"
-                begin={`${i * 0.6 + 1.2}s`}
-              />
-            </circle>
-            {/* Arrow tip */}
             <polygon
               points={`${c.x2 - 6},${c.cy - 4} ${c.x2},${c.cy} ${c.x2 - 6},${c.cy + 4}`}
               fill="var(--border-hover)"
@@ -416,10 +376,6 @@ function App() {
 
       {/* ── Hero ── */}
       <section className="hero">
-        <div className="hero-tag">
-          <span className="dot" />
-          Live on Stellar Testnet
-        </div>
         <h1>
           Gasless Soroban<br />
           <span className="accent">Infrastructure.</span>
@@ -659,6 +615,11 @@ function App() {
                         ? "Insufficient balance"
                         : "Send 10 USDC (Gasless)"}
                   </button>
+                  {loading && (
+                    <p className="loading-disclaimer">
+                      Executing transaction... (This may take up to 60 seconds if the free Relayer bot is waking up from sleep mode).
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
