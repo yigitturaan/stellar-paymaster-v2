@@ -670,7 +670,7 @@ function App() {
       {/* ── Footer ── */}
       <footer className="footer">
         <div className="footer-left">
-          soroban-gaskit — ODTU Blockchain Hackathon
+          soroban-gaskit — Gasless SDK for Stellar
         </div>
         <div className="footer-right">
           <a

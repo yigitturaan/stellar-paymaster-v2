@@ -3,10 +3,10 @@
 > **The action-agnostic SDK for gasless Soroban transactions.**
 > Users pay fees in USDC — zero XLM required. Any contract call. Three lines to integrate.
 
-[![Stellar](https://img.shields.io/badge/Stellar-Soroban-blue?logo=stellar)](https://soroban.stellar.org)
-[![Network](https://img.shields.io/badge/Network-Testnet-green)](https://soroban-testnet.stellar.org)
-[![Hackathon](https://img.shields.io/badge/ODTU-Blockchain%20Hackathon-purple)](https://github.com/yigitturaan/soroban-gaskit)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+[![Soroban](https://img.shields.io/badge/Soroban-Powered-blue?logo=stellar)](https://soroban.stellar.org)
+[![Stellar Network](https://img.shields.io/badge/Stellar-Testnet-green?logo=stellar)](https://soroban-testnet.stellar.org)
+[![Open Source](https://img.shields.io/badge/Open%20Source-MIT-yellow)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/yigitturaan/soroban-gaskit/pulls)
 
 ---
 
@@ -191,11 +191,10 @@ If either step fails, the entire transaction reverts. No partial state changes.
 
 ## License
 
-MIT
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-<p align="center">
-  Built for the <strong>ODTU Blockchain Hackathon</strong><br/>
-  Powered by <a href="https://stellar.org">Stellar</a> & <a href="https://soroban.stellar.org">Soroban</a>
-</p>
+## Community & Support
+
+Contributions are welcome! Feel free to [open issues](https://github.com/yigitturaan/soroban-gaskit/issues) or [submit PRs](https://github.com/yigitturaan/soroban-gaskit/pulls) to improve the Soroban GasKit ecosystem.
