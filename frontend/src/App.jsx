@@ -138,7 +138,7 @@ function ArchDiagram() {
 
   const nodes = [
     { x: 20, label: "User / DApp", sub: "WALLET", icon: <IconUser />, color: "var(--text-1)" },
-    { x: 20 + nodeW + gap, label: "Paymaster SDK", sub: "CLIENT", icon: <IconBox />, color: "var(--accent)" },
+    { x: 20 + nodeW + gap, label: "GasKit SDK", sub: "CLIENT", icon: <IconBox />, color: "var(--accent)" },
     { x: 20 + (nodeW + gap) * 2, label: "Relayer Bot", sub: "API", icon: <IconCloud />, color: "var(--green)" },
     { x: 20 + (nodeW + gap) * 3, label: "Soroban RPC", sub: "ON-CHAIN", icon: <IconLink />, color: "#93c5fd" },
   ];
@@ -232,7 +232,7 @@ function ArchDiagram() {
 function MobileFlow() {
   const items = [
     { num: "01", label: "User / DApp", detail: "Wallet interaction", icon: <IconUser /> },
-    { num: "02", label: "Paymaster SDK", detail: "Simulate + sign auth", icon: <IconBox /> },
+    { num: "02", label: "GasKit SDK", detail: "Simulate + sign auth", icon: <IconBox /> },
     { num: "03", label: "Relayer Bot", detail: "Sign XDR + submit", icon: <IconCloud /> },
     { num: "04", label: "Soroban RPC", detail: "On-chain finality", icon: <IconLink /> },
   ];
@@ -375,7 +375,7 @@ function App() {
       {/* ── Nav ── */}
       <nav className="nav">
         <a href="#" className="nav-brand">
-          soroban-gas-station <span>/testnet</span>
+          Soroban GasKit <span>/testnet</span>
         </a>
         <div className="nav-right">
           <a href="#why" className="nav-link hide-mobile">Why</a>
@@ -521,9 +521,9 @@ function App() {
             <span className="terminal-title">usage.js</span>
           </div>
           <div className="terminal-body">
-            <div className="ln"><span className="ln-num">1</span><span className="ln-content"><span className="t-kw">const</span> paymaster = <span className="t-kw">new</span> <span className="t-fn">SorobanPaymaster</span>{"({"} ...config {"});"}</span></div>
+            <div className="ln"><span className="ln-num">1</span><span className="ln-content"><span className="t-kw">const</span> gaskit = <span className="t-kw">new</span> <span className="t-fn">SorobanGasKit</span>{"({"} ...config {"});"}</span></div>
             <div className="ln"><span className="ln-num">2</span><span className="ln-content" /></div>
-            <div className="ln"><span className="ln-num">3</span><span className="ln-content"><span className="t-kw">await</span> paymaster.<span className="t-fn">execute</span>{"({"}</span></div>
+            <div className="ln"><span className="ln-num">3</span><span className="ln-content"><span className="t-kw">await</span> gaskit.<span className="t-fn">execute</span>{"({"}</span></div>
             <div className="ln"><span className="ln-num">4</span><span className="ln-content">{"  "}user, targetContract, functionName,</span></div>
             <div className="ln"><span className="ln-num">5</span><span className="ln-content">{"  "}args, signer</span></div>
             <div className="ln"><span className="ln-num">6</span><span className="ln-content">{"});"} <span className="t-cmt">{"// that's it — zero XLM needed"}</span></span></div>
@@ -670,7 +670,7 @@ function App() {
       {/* ── Footer ── */}
       <footer className="footer">
         <div className="footer-left">
-          soroban-gas-station — ODTU Blockchain Hackathon
+          soroban-gaskit — ODTU Blockchain Hackathon
         </div>
         <div className="footer-right">
           <a
