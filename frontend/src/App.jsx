@@ -18,7 +18,7 @@ const paymaster = new SorobanPaymaster({
   feeToken: "CA63EPM4EEXUVUANF6FQUJEJ37RWRYIXCARWFXYUMPP7RLZWFNLTVNR4",
   relayerUrl: "https://stellar-gas-station-api.onrender.com/relay",
   relayerPublicKey: "GCF57AY6GBLPG6VK3LU27A4E5CSJRYSNSBA5XB2V6MKPUVF7PSHTT5KW",
-  feeAmount: 5_000_000n,
+  feeAmount: 50_000n,
 });
 
 const SEND_AMOUNT = 100_000_000n;
@@ -510,7 +510,7 @@ function App() {
             <div className="cell-unit">XLM from user</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
-            <div className="cell-value">0.5</div>
+            <div className="cell-value">0.005</div>
             <div className="cell-unit">USDC fee</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
@@ -573,7 +573,7 @@ function App() {
               <div className="step-content">
                 <div className="step-name">Execute Transfer</div>
                 <div className="step-detail">
-                  Send 10 USDC. Fee: 0.5 USDC. XLM cost: 0.
+                  Send 10 USDC. Fee: 0.005 USDC. XLM cost: 0.
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="recipient">

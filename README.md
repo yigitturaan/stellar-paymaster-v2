@@ -22,7 +22,7 @@ This kills conversion for consumer dApps, wallets, and payment flows.
 
 ## The Solution
 
-**Soroban Gas Station** is an action-agnostic Paymaster SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (e.g. 0.5 USDC) from the user — all in a single transaction.
+**Soroban Gas Station** is an action-agnostic Paymaster SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (e.g. 0.005 USDC) from the user — all in a single transaction.
 
 - **Any contract call** — transfers, swaps, mints, governance votes.
 - **Atomic execution** — fee payment and the user action never partially fail.
@@ -65,7 +65,7 @@ const paymaster = new SorobanPaymaster({
   feeToken:         "CA63EPM...LTVNR4",    // USDC on Testnet
   relayerUrl:       "https://stellar-gas-station-api.onrender.com/relay",
   relayerPublicKey: "GCF57AY...SHTT5KW",
-  feeAmount:        5_000_000n,             // 0.5 USDC (7-decimal)
+  feeAmount:        50_000n,                // 0.005 USDC (7-decimal)
 });
 
 // Gasless USDC transfer — that's it.
@@ -174,7 +174,7 @@ pub fn execute_proxy(
     fee_token:       Address,    // e.g. USDC
     user:            Address,    // pays the fee
     relayer:         Address,    // receives the fee
-    fee_amount:      i128,       // 0.5 USDC = 5_000_000
+    fee_amount:      i128,       // 0.005 USDC = 50_000
     target_contract: Address,    // any Soroban contract
     function_name:   Symbol,     // any function
     args:            Vec<Val>,   // encoded arguments
