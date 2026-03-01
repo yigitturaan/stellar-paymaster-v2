@@ -414,8 +414,8 @@ function App() {
           <span className="accent">Infrastructure.</span>
         </h1>
         <p className="hero-sub">
-          Users pay fees in USDC. Zero XLM required.<br />
-          Any contract call. Three lines to integrate.
+          The action-agnostic gas abstraction layer for Soroban.<br />
+          Users pay in USDC. Zero XLM. Three lines to integrate.
         </p>
         <div className="hero-actions">
           <a href="#demo" className="btn btn-primary">
@@ -455,11 +455,11 @@ function App() {
 
           <div className="ps-card ps-solution">
             <div className="ps-badge ps-badge-green">Solution</div>
-            <h3>One SDK. Zero XLM. Any contract.</h3>
+            <h3>True Gas Abstraction</h3>
             <ul className="ps-list">
               <li>Users pay a micro-fee in USDC (0.005 USDC)</li>
               <li>Relayer bot covers all XLM network costs</li>
-              <li>Works with <em>any</em> Soroban contract call</li>
+              <li>Action-agnostic — works with <em>any</em> Soroban contract</li>
             </ul>
             <p className="ps-impact">
               Result: <strong>Web2-grade UX</strong> — users interact with dApps using only the assets they already hold.

@@ -1,6 +1,6 @@
 # Soroban GasKit
 
-> **The action-agnostic SDK for gasless Soroban transactions.**
+> The action-agnostic **Gas Abstraction** SDK for Soroban.
 > Users pay fees in USDC — zero XLM required. Any contract call. Three lines to integrate.
 
 [![Soroban](https://img.shields.io/badge/Soroban-Powered-blue?logo=stellar)](https://soroban.stellar.org)
@@ -22,7 +22,7 @@ This kills conversion for consumer dApps, wallets, and payment flows.
 
 ## The Solution
 
-**Soroban GasKit** is an action-agnostic SDK that eliminates gas friction. A relayer bot covers the XLM network fee and atomically collects a small token fee (0.005 USDC) from the user — all in a single transaction.
+**Soroban GasKit** provides true **gas abstraction** through an action-agnostic SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (0.005 USDC) from the user — all in a single transaction.
 
 - **Any contract call** — transfers, swaps, mints, governance votes.
 - **Atomic execution** — fee payment and the user action never partially fail.
