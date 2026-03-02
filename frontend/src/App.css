@@ -960,6 +960,14 @@
   color: var(--green);
 }
 
+.wallet-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
 .receipt-explorer-btn {
   display: inline-flex;
   align-items: center;
@@ -969,7 +977,7 @@
   padding: 12px 20px;
   border: 1px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--accent-muted);
+  background: transparent;
   color: var(--accent);
   font-size: 0.9rem;
   font-weight: 600;
@@ -978,7 +986,7 @@
 }
 
 .receipt-explorer-btn:hover {
-  background: rgba(99, 102, 241, 0.2);
+  background: var(--accent-muted);
 }
 
 .log-line {

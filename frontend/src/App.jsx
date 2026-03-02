@@ -585,7 +585,7 @@ await gaskit.execute({
                   Authenticate via Freighter extension.
                 </div>
                 {publicKey ? (
-                  <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", marginTop: 8 }}>
+                  <div className="wallet-badges">
                     <span className="connected-badge">
                       <span className="c-dot" />
                       {truncAddr(publicKey)}
