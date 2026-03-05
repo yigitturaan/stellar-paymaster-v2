@@ -18,7 +18,7 @@ const paymaster = new SorobanPaymaster({
   feeToken: "CA63EPM4EEXUVUANF6FQUJEJ37RWRYIXCARWFXYUMPP7RLZWFNLTVNR4",
   relayerUrl: "https://stellar-gas-station-api.onrender.com/relay",
   relayerPublicKey: "GCF57AY6GBLPG6VK3LU27A4E5CSJRYSNSBA5XB2V6MKPUVF7PSHTT5KW",
-  feeAmount: 50_000n,
+  feeAmount: 9_000n,
 });
 
 const SEND_AMOUNT = 100_000_000n;
@@ -434,7 +434,7 @@ await gaskit.execute({
             <div className="ps-badge ps-badge-green">Solution</div>
             <h3>True Gas Abstraction</h3>
             <ul className="ps-list">
-              <li>Users pay a micro-fee in USDC (0.005 USDC)</li>
+              <li>Users pay a micro-fee in USDC (0.0009 USDC)</li>
               <li>Relayer bot covers all XLM network costs</li>
               <li>Action-agnostic — works with <em>any</em> Soroban contract</li>
             </ul>
@@ -549,7 +549,7 @@ await gaskit.execute({
             <div className="cell-unit">XLM from user</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
-            <div className="cell-value">0.005</div>
+            <div className="cell-value">0.0009</div>
             <div className="cell-unit">USDC fee</div>
           </div>
           <div className="bento-cell" style={{ textAlign: "center" }}>
@@ -615,7 +615,7 @@ await gaskit.execute({
               <div className="step-content">
                 <div className="step-name">Execute Transfer</div>
                 <div className="step-detail">
-                  Send 10 USDC. Fee: 0.005 USDC. XLM cost: 0.
+                  Send 10 USDC. Fee: 0.0009 USDC. XLM cost: 0.
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="recipient">
@@ -683,7 +683,7 @@ await gaskit.execute({
                 </div>
                 <div className="receipt-row">
                   <span className="receipt-label">Paid</span>
-                  <span className="receipt-value">0.005 USDC</span>
+                  <span className="receipt-value">0.0009 USDC</span>
                 </div>
                 <div className="receipt-row">
                   <span className="receipt-label">Action</span>

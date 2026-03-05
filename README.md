@@ -23,7 +23,7 @@ This kills conversion for consumer dApps, wallets, and payment flows.
 
 ## The Solution
 
-**Soroban GasKit** provides true **gas abstraction** through an action-agnostic SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (0.005 USDC) from the user — all in a single transaction.
+**Soroban GasKit** provides true **gas abstraction** through an action-agnostic SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (0.0009 USDC) from the user — all in a single transaction.
 
 - **Any contract call** — transfers, swaps, mints, governance votes.
 - **Atomic execution** — fee payment and the user action never partially fail.
@@ -74,7 +74,7 @@ const gaskit = new SorobanGasKit({
   feeToken:         "CA63EPM...LTVNR4",    // REPLACE THIS with your own Token ID!
   relayerUrl:       "https://stellar-gas-station-api.onrender.com/relay",
   relayerPublicKey: "GCF57AY...SHTT5KW",
-  feeAmount:        50_000n,                // 0.005 tokens (assuming 7-decimals)
+  feeAmount:        9_000n,                // 0.0009 tokens (assuming 7-decimals)
 });
 
 // 2. Wrap any contract call into a gasless transaction
@@ -183,7 +183,7 @@ pub fn execute_proxy(
     fee_token:       Address,    // e.g. USDC
     user:            Address,    // pays the fee
     relayer:         Address,    // receives the fee
-    fee_amount:      i128,       // 0.005 USDC = 50_000
+    fee_amount:      i128,       // 0.0009 USDC = 9_000
     target_contract: Address,    // any Soroban contract
     function_name:   Symbol,     // any function
     args:            Vec<Val>,   // encoded arguments
