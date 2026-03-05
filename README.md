@@ -3,6 +3,8 @@
 > The action-agnostic **Gas Abstraction** SDK for Soroban.
 > Users pay fees in USDC — zero XLM required. Any contract call. Three lines to integrate.
 
+**[Try the Live Demo](https://soroban-gaskit.vercel.app/)** | **[Watch the Architecture & Demo Video](#)**
+
 [![Soroban](https://img.shields.io/badge/Soroban-Powered-blue?logo=stellar)](https://soroban.stellar.org)
 [![Stellar Network](https://img.shields.io/badge/Stellar-Testnet-green?logo=stellar)](https://soroban-testnet.stellar.org)
 [![Open Source](https://img.shields.io/badge/Open%20Source-MIT-yellow)](LICENSE)
@@ -29,6 +31,14 @@ This kills conversion for consumer dApps, wallets, and payment flows.
 - **Atomic execution** — fee payment and the user action never partially fail.
 - **Zero trust required** — the on-chain contract enforces the fee transfer before forwarding the call.
 - **Client-side simplicity** — no API keys or backend proxies required. A truly lightweight, zero-configuration module built for frontend developers.
+
+---
+
+## Target Business Use Cases
+
+- **Consumer Wallets & Fintech:** Allow users to send cross-border stablecoin payments without ever knowing what "gas" or "XLM" is.
+- **DeFi Onboarding:** Enable users to deposit into yield protocols or swap tokens instantly, removing the friction of acquiring network tokens first.
+- **B2B Web3 Infrastructure:** Empower other Soroban developers to offer premium, gasless experiences in their own dApps with our plug-and-play SDK.
 
 ---
 
@@ -207,3 +217,10 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ## Community & Support
 
 Contributions are welcome! Feel free to [open issues](https://github.com/yigitturaan/soroban-gaskit/issues) or [submit PRs](https://github.com/yigitturaan/soroban-gaskit/pulls) to improve the Soroban GasKit ecosystem.
+
+---
+
+## Team
+
+Built for the Stellar & Soroban ecosystem.
+- **GitHub:** [@yigitturaan](https://github.com/yigitturaan)
