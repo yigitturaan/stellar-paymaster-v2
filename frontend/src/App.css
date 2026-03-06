@@ -977,12 +977,15 @@
 
 .receipt-pill {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 4px 10px;
   border-radius: 100px;
   font-size: 0.7rem;
   font-weight: 600;
   background: var(--green-muted);
   color: var(--green);
+  line-height: 1;
 }
 
 .wallet-badges {

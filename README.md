@@ -172,7 +172,7 @@ soroban-gaskit/
 
 - Node.js 18+
 - [Freighter Wallet](https://freighter.app) browser extension
-- Stellar Testnet USDC in your wallet
+- Stellar Testnet USDC in your wallet (You can claim this directly via the built-in Faucet in our frontend demo)
 
 ### Run Locally
 

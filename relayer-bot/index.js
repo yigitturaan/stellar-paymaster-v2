@@ -3,11 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const StellarSdk = require("@stellar/stellar-sdk");
 
-const { PORT = 3001, RELAYER_SECRET_KEY } = process.env;
+const { PORT = 3001, RELAYER_SECRET_KEY, FAUCET_SECRET_KEY } = process.env;
 if (!RELAYER_SECRET_KEY) {
   console.error("RELAYER_SECRET_KEY is required in .env");
   process.exit(1);
 }
+
+const HORIZON_URL = "https://horizon-testnet.stellar.org";
+const USDC_ISSUER = "GCKIUOTK3NWD33ONH7TQERCSLECXLWQMA377HSJR4E2MV7KPQFAQLOLN";
+const claimHistory = new Map();
 
 const RPC_URL = "https://soroban-testnet.stellar.org";
 const NETWORK_PASSPHRASE = StellarSdk.Networks.TESTNET;
@@ -191,6 +195,58 @@ app.post("/relay", async (req, res) => {
   } catch (err) {
     console.error("[relay] exception:", err);
     return res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/faucet", async (req, res) => {
+  if (!FAUCET_SECRET_KEY) {
+    return res.status(503).json({ error: "Faucet is not configured" });
+  }
+
+  const { address } = req.body;
+  if (!StellarSdk.StrKey.isValidEd25519PublicKey(address)) {
+    return res.status(400).json({ error: "Invalid address" });
+  }
+
+  const lastClaim = claimHistory.get(address);
+  if (lastClaim && Date.now() - lastClaim < 24 * 60 * 60 * 1000) {
+    return res.status(429).json({ error: "Rate limit: Can only claim once per 24 hours." });
+  }
+
+  try {
+    const horizon = new StellarSdk.Horizon.Server(HORIZON_URL);
+    const recipient = await horizon.loadAccount(address);
+    const hasTrustline = recipient.balances.some(
+      (b) => b.asset_code === "USDC" && b.asset_issuer === USDC_ISSUER,
+    );
+    if (!hasTrustline) {
+      return res.status(400).json({ error: "Please add USDC trustline first" });
+    }
+
+    const keypair = StellarSdk.Keypair.fromSecret(FAUCET_SECRET_KEY);
+    const faucetAccount = await horizon.loadAccount(keypair.publicKey());
+    const tx = new StellarSdk.TransactionBuilder(faucetAccount, {
+      fee: StellarSdk.BASE_FEE,
+      networkPassphrase: StellarSdk.Networks.TESTNET,
+    })
+      .addOperation(
+        StellarSdk.Operation.payment({
+          destination: address,
+          asset: new StellarSdk.Asset("USDC", USDC_ISSUER),
+          amount: "100",
+        }),
+      )
+      .setTimeout(30)
+      .build();
+
+    tx.sign(keypair);
+    const result = await horizon.submitTransaction(tx);
+    claimHistory.set(address, Date.now());
+    return res.json({ success: true, txHash: result.hash });
+  } catch (err) {
+    console.error("[faucet] error:", err);
+    const msg = err.response?.data?.extras?.result_codes?.transaction ?? err.message ?? "Unknown error";
+    return res.status(400).json({ error: msg });
   }
 });
 

@@ -5,18 +5,23 @@ import {
   setAllowed,
   getAddress,
   signAuthEntry,
+  signTransaction,
 } from "@stellar/freighter-api";
 import { SorobanPaymaster } from "./SorobanPaymaster";
 import "./App.css";
 
 const NETWORK_PASSPHRASE = "Test SDF Network ; September 2015";
 
+const HORIZON_URL = "https://horizon-testnet.stellar.org";
+const USDC_ISSUER = "GCKIUOTK3NWD33ONH7TQERCSLECXLWQMA377HSJR4E2MV7KPQFAQLOLN";
+const API_BASE = "https://stellar-gas-station-api.onrender.com";
+
 const paymaster = new SorobanPaymaster({
   rpcUrl: "https://soroban-testnet.stellar.org",
   networkPassphrase: NETWORK_PASSPHRASE,
   contractId: "CAPDJ4F747URENH5FLAKHXH377JOENTSRCY4NQBJQZZIEJEBGUZG5NCY",
   feeToken: "CA63EPM4EEXUVUANF6FQUJEJ37RWRYIXCARWFXYUMPP7RLZWFNLTVNR4",
-  relayerUrl: "https://stellar-gas-station-api.onrender.com/relay",
+  relayerUrl: `${API_BASE}/relay`,
   relayerPublicKey: "GCF57AY6GBLPG6VK3LU27A4E5CSJRYSNSBA5XB2V6MKPUVF7PSHTT5KW",
   feeAmount: 9_000n,
 });
@@ -235,6 +240,8 @@ function App() {
   const [recipient, setRecipient] = useState("");
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [trustlineLoading, setTrustlineLoading] = useState(false);
+  const [faucetLoading, setFaucetLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [lastTxHash, setLastTxHash] = useState(null);
   const logRef = useRef(null);
@@ -343,6 +350,84 @@ await gaskit.execute({
       log("err", msg);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleAddTrustline() {
+    if (!publicKey) {
+      await connectWallet();
+      return;
+    }
+    setTrustlineLoading(true);
+    try {
+      log("info", "Building changeTrust transaction...");
+      const server = new StellarSdk.Horizon.Server(HORIZON_URL);
+      const usdcAsset = new StellarSdk.Asset("USDC", USDC_ISSUER);
+      const account = await server.loadAccount(publicKey);
+      const tx = new StellarSdk.TransactionBuilder(account, {
+        fee: StellarSdk.BASE_FEE,
+        networkPassphrase: NETWORK_PASSPHRASE,
+      })
+        .addOperation(StellarSdk.Operation.changeTrust({ asset: usdcAsset }))
+        .setTimeout(30)
+        .build();
+
+      const signResult = await signTransaction(tx.toXDR(), {
+        networkPassphrase: NETWORK_PASSPHRASE,
+      });
+      if (signResult.error || !signResult.signedTxXdr) {
+        throw new Error(signResult.error?.message ?? "Signature rejected.");
+      }
+
+      const signedTx = StellarSdk.TransactionBuilder.fromXDR(
+        signResult.signedTxXdr,
+        NETWORK_PASSPHRASE,
+      );
+      const result = await server.submitTransaction(signedTx);
+      log("ok", `Trustline added successfully! TX: ${result.hash}`);
+      const newBal = await paymaster.getTokenBalance(publicKey);
+      if (newBal !== null) {
+        setTokenOk(true);
+        setBalance(newBal);
+        log("ok", `Balance: ${fmtUsdc(newBal)} USDC`);
+      }
+    } catch (err) {
+      const msg = err.response?.data?.extras?.result_codes?.transaction ?? err.message ?? "Unknown error";
+      log("err", `Trustline error: ${msg}`);
+    } finally {
+      setTrustlineLoading(false);
+    }
+  }
+
+  async function handleFaucet() {
+    if (!publicKey) {
+      await connectWallet();
+      return;
+    }
+    setFaucetLoading(true);
+    try {
+      log("info", "Requesting test USDC from Faucet...");
+      const res = await fetch(`${API_BASE}/api/faucet`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address: publicKey }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error ?? `HTTP ${res.status}`);
+      }
+      log("ok", `Faucet request successful! TX: ${data.txHash}`);
+      log("ok", "100 USDC received!");
+      const newBal = await paymaster.getTokenBalance(publicKey);
+      if (newBal !== null) {
+        setBalance(newBal);
+        log("ok", `Balance: ${fmtUsdc(newBal)} USDC`);
+      }
+    } catch (err) {
+      const msg = err.message ?? "Unknown error";
+      log("err", `Faucet error: ${msg}`);
+    } finally {
+      setFaucetLoading(false);
     }
   }
 
@@ -569,7 +654,8 @@ await gaskit.execute({
           A live demonstration of the Soroban GasKit infrastructure. Watch how just 3 lines of frontend code can wrap any standard contract call into a completely gasless experience, powered by our custom smart contracts and relayer network.
         </p>
 
-        <div className="testing-disclaimer"><strong>Live Testing Note:</strong> To execute a transaction in this demo, your Freighter wallet must hold our specific Testnet USDC and have an active trustline established. If you don&apos;t have these prerequisites configured, the on-chain simulation will revert. Please refer to our <strong>Demo Video</strong> for a complete, end-to-end walkthrough of the architecture.
+        <div className="testing-disclaimer">
+          <strong>Live Testing Note:</strong> Gasless execution requires a Testnet USDC trustline and a small token balance. You can configure this instantly using the {'\''}Setup & Fund{'\''} step below, which provides a 1-click trustline setup and a built-in Faucet to claim 100 Testnet USDC.
         </div>
 
         <div className="panel-grid">
@@ -577,7 +663,7 @@ await gaskit.execute({
           <div className="panel-left">
             <div className="panel-label">Transaction Pipeline</div>
 
-            {/* Step 1 */}
+            {/* Step 1: Connect Wallet */}
             <div className="step-item">
               <div className={`step-indicator ${publicKey ? "done" : "active"}`}>
                 {publicKey ? "\u2713" : "1"}
@@ -607,10 +693,45 @@ await gaskit.execute({
               </div>
             </div>
 
-            {/* Step 2 */}
+            {/* Step 2: Setup & Fund */}
+            <div className="step-item">
+              <div className={`step-indicator ${publicKey ? (tokenOk ? "done" : "active") : ""}`}>
+                {publicKey && tokenOk ? "\u2713" : "2"}
+              </div>
+              <div className="step-content">
+                <div className="step-name">Setup & Fund</div>
+                <div className="step-detail">
+                  Add USDC trustline and request test tokens. Note: Establishing a trustline requires a ~0.5 XLM base reserve.
+                </div>
+                {publicKey && (
+                  <div className="step-actions" style={{ marginTop: 10 }}>
+                    {tokenOk ? (
+                      <span className="receipt-pill">Trustline Active</span>
+                    ) : (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={handleAddTrustline}
+                        disabled={trustlineLoading}
+                      >
+                        {trustlineLoading ? "Processing..." : "Add USDC Trustline"}
+                      </button>
+                    )}
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={handleFaucet}
+                      disabled={faucetLoading || !tokenOk}
+                    >
+                      {faucetLoading ? "Processing..." : "Get Test USDC"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Step 3: Execute Transfer */}
             <div className="step-item">
               <div className={`step-indicator ${publicKey && tokenOk ? "active" : ""}`}>
-                2
+                3
               </div>
               <div className="step-content">
                 <div className="step-name">Execute Transfer</div>
