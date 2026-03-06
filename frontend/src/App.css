@@ -10,8 +10,8 @@
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(250, 204, 21, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 204, 21, 0.03) 1px, transparent 1px);
   background-size: 64px 64px;
   pointer-events: none;
   z-index: 0;
@@ -176,7 +176,8 @@
 
 .btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: #111827;
+  font-weight: 600;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -468,7 +469,7 @@
 }
 
 .tag-accent {
-  border-color: rgba(99, 102, 241, 0.25);
+  border-color: rgba(250, 204, 21, 0.25);
   color: var(--accent);
   background: var(--accent-muted);
 }
@@ -584,7 +585,7 @@
 }
 
 .terminal-body .t-kw { color: var(--accent); }
-.terminal-body .t-fn { color: #93c5fd; }
+.terminal-body .t-fn { color: var(--accent); }
 .terminal-body .t-str { color: var(--green); }
 .terminal-body .t-cmt { color: var(--text-3); }
 
