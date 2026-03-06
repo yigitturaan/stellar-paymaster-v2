@@ -392,8 +392,15 @@ await gaskit.execute({
         log("ok", `Balance: ${fmtUsdc(newBal)} USDC`);
       }
     } catch (err) {
-      const msg = err.response?.data?.extras?.result_codes?.transaction ?? err.message ?? "Unknown error";
-      log("err", `Trustline error: ${msg}`);
+      const status = err.response?.status ?? err.response?.data?.status;
+      const msgLower = String(err.message ?? "").toLowerCase();
+      const isNotFound = status === 404 || msgLower.includes("not found") || msgLower.includes("404");
+      if (isNotFound) {
+        log("err", "Trustline error: Account not active. Please open your Freighter extension and click 'Fund with Friendbot' to initialize your wallet with testnet XLM first.");
+      } else {
+        const msg = err.response?.data?.extras?.result_codes?.transaction ?? err.message ?? "Unknown error";
+        log("err", `Trustline error: ${msg}`);
+      }
     } finally {
       setTrustlineLoading(false);
     }
