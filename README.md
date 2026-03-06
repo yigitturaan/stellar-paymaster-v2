@@ -25,12 +25,40 @@ This kills conversion for consumer dApps, wallets, and payment flows.
 
 ## GasKit vs. Native Fee-Bump
 
-Stellar natively supports Fee-Bump transactions. However, implementing them requires developers to build, host, and secure their own relayer backends to manage private keys and XDR assembly. **Soroban GasKit abstracts this entirely.** We provide a zero-configuration, frontend-only SDK. Developers get the power of Fee-Bump without writing a single line of backend code.
+Stellar natively supports Fee-Bump transactions. However, implementing them requires developers to build, host, and secure their own relayer backends to manage private keys and XDR assembly. **Soroban GasKit provides the complete full-stack infrastructure to abstract this entirely.** While developers interact with a zero-configuration SDK, our battle-tested smart contracts and relayer network handle the heavy lifting behind the scenes. Developers get the power of Fee-Bump without writing a single line of backend code.
+
+## The Developer Experience Benchmark
+
+**Without GasKit (Native Fee-Bump)**
+Developers must build and maintain their own backend infrastructure to handle XDR assembly, sequence number management, and private key security.
+1. Frontend requests transaction build from Backend.
+2. Backend queries Soroban RPC for sequence numbers.
+3. Backend builds FeeBumpTransaction XDR.
+4. Backend signs with the Relayer's Private Key (Security Risk).
+5. Backend sends XDR back to Frontend.
+6. Frontend asks User to sign the inner transaction.
+7. Frontend submits to RPC and handles polling.
+*(Estimated: 200+ lines of backend/frontend code + server maintenance)*
+
+**With Soroban GasKit**
+Zero backend required. The entire flow is handled client-side in just 3 lines of code.
+
+```javascript
+// Drop this directly into your React/Vite frontend. No backend needed.
+await gaskit.execute({
+  user:           publicKey,
+  targetContract: "CUSDC...",
+  functionName:   "transfer",
+  args:           [from, to, amount],
+  signer:         freighterSigner,
+});
+```
 
 ## The Solution
 
 **Soroban GasKit** provides true **gas abstraction** through an action-agnostic SDK. A relayer bot covers the XLM network fee and atomically collects a small token fee (0.0009 USDC) from the user — all in a single transaction.
 
+- **Full-Stack Infrastructure** — You integrate a lightweight client module, while our deployed Rust contracts and Express.js relayer network manage the atomic fee collection and network submission.
 - **Any contract call** — transfers, swaps, mints, governance votes.
 - **Atomic execution** — fee payment and the user action never partially fail.
 - **Zero trust required** — the on-chain contract enforces the fee transfer before forwarding the call.
@@ -46,7 +74,7 @@ Stellar natively supports Fee-Bump transactions. However, implementing them requ
 
 ---
 
-## Architecture
+## The Infrastructure Architecture
 
 ```
 ┌──────────────┐       ┌──────────────────┐       ┌──────────────┐       ┌──────────────┐
@@ -168,35 +196,6 @@ cd fee-forwarder
 stellar contract build
 stellar contract deploy --wasm target/wasm32-unknown-unknown/release/hello_world.wasm \
   --source <DEPLOYER> --network testnet
-```
-
----
-
-## The Developer Experience Benchmark
-
-**Without GasKit (Native Fee-Bump)**
-Developers must build and maintain their own backend infrastructure to handle XDR assembly, sequence number management, and private key security.
-1. Frontend requests transaction build from Backend.
-2. Backend queries Soroban RPC for sequence numbers.
-3. Backend builds FeeBumpTransaction XDR.
-4. Backend signs with the Relayer's Private Key (Security Risk).
-5. Backend sends XDR back to Frontend.
-6. Frontend asks User to sign the inner transaction.
-7. Frontend submits to RPC and handles polling.
-*(Estimated: 200+ lines of backend/frontend code + server maintenance)*
-
-**With Soroban GasKit**
-Zero backend required. The entire flow is handled client-side in just 3 lines of code.
-
-```javascript
-// Drop this directly into your React/Vite frontend. No backend needed.
-await gaskit.execute({
-  user:           publicKey,
-  targetContract: "CUSDC...",
-  functionName:   "transfer",
-  args:           [from, to, amount],
-  signer:         freighterSigner,
-});
 ```
 
 ---
