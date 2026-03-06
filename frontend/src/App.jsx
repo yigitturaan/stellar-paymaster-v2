@@ -701,7 +701,7 @@ await gaskit.execute({
               <div className="step-content">
                 <div className="step-name">Setup & Fund</div>
                 <div className="step-detail">
-                  Add USDC trustline and request test tokens. Note: Establishing a trustline requires a ~0.5 XLM base reserve.
+                  Prepare your wallet for the demo. Establish a USDC trustline and claim 100 test tokens to experience true gasless transactions.
                 </div>
                 {publicKey && (
                   <div className="step-actions" style={{ marginTop: 10 }}>
